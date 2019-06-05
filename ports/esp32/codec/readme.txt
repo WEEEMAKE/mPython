@@ -379,7 +379,44 @@ github分支提交
 	 增加以下python层面指令：
 	 recorder_init
 	 recorder_deinit
-	 soundness_db
+	 soundness
 	 record
 	 xunfei_iat_config
 	 xunfie_iat
+
+2019.06.05
+  1 添加播放WAV文件
+	2、添加录音功能
+	3、支持讯飞iat
+	4、修改异常处理。
+
+1. codec文件夹结构：
+  codec
+	|--codec_lib    //解码库，存放各解码库
+	|  |--helix
+	|     |--include
+	|     |--src
+	|     |--readme.md
+	|--decoder     //解码任务
+	|  |--include
+	|  |  |--helix_decodec.h
+	|  |--helix_mp3_decoder.c
+	|--include 
+	|  |--audio_play.h
+	|  |--audio_render.h  
+	|  |--board.h
+	|  |--http_client.h  
+	|  |--local_file.h  
+	|  |--modcodec.h
+	|  |--urlcodec.h
+	|  |--wav_head.h
+	|  |--audio_recocrder.h
+	|--audio_play.c    //播放任务
+	|--audio_render.c  //i2s dac设置
+	|--http_client.c   //网络音频获取
+	|--local_file.c    //本地音频读写
+	|--modcodec.c      //python模块
+	|--readme.md       //本文档
+	|--urlcodec.c
+	|--wav_head.c
+	|--audio_recorder.c
