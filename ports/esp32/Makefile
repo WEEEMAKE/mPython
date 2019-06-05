@@ -251,6 +251,8 @@ CODEC_SRC_C = $(addprefix codec/,\
 	audio_renderer.c \
 	url_codec.c \
 	local_file.c \
+	wav_head.c \
+	audio_recorder.c \
 	codec_lib/helix/src/bitstream.c \
 	codec_lib/helix/src/buffers.c \
 	codec_lib/helix/src/dct32.c \
