@@ -181,7 +181,8 @@ int mp_machine_hw_i2c_writeto(mp_obj_base_t *self_in, uint16_t addr, const uint8
     i2c_cmd_handle_t cmd = i2c_cmd_link_create();
     ret |= i2c_master_start(cmd);
     ret |= i2c_master_write_byte(cmd, (addr << 1) | WRITE_BIT, ACK_CHECK_EN);
-    ret |= i2c_master_write(cmd, (uint8_t *)src, len, ACK_CHECK_EN);
+    if(src != NULL)
+        ret |= i2c_master_write(cmd, (uint8_t *)src, len, ACK_CHECK_EN);
     ret |= i2c_master_stop(cmd);
     ret |= i2c_master_cmd_begin(self->i2c_port, cmd, 1000 / portTICK_RATE_MS);
     i2c_cmd_link_delete(cmd);
@@ -241,10 +242,15 @@ mp_obj_t machine_hw_i2c_make_new(const mp_obj_type_t *type, size_t n_args, size_
     if (args[ARG_port].u_int == 0) {
         self = &machine_hw_i2c_obj[0];
         self->i2c_port = 0;
-    } else {
+    } else if(args[ARG_port].u_int == 1){
         self = &machine_hw_i2c_obj[1];
         self->i2c_port = 1;
     }
+    else
+    {
+        mp_raise_msg(&mp_type_OSError, "invalid i2c port");
+    }
+    
     self->base.type = &machine_hw_i2c_type;
 
     machine_hw_i2c_init_internal(
