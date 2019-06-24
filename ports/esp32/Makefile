@@ -210,6 +210,7 @@ SRC_C = \
 	modmusic.c \
 	modmusictunes.c \
 	modradio.c \
+	machine_hw_i2c.c \
 	$(SRC_MOD)
 
 EXTMOD_SRC_C = $(addprefix extmod/,\

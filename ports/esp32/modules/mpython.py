@@ -18,7 +18,7 @@ from esp import dht_readinto
 from time import sleep_ms, sleep_us,sleep
 from framebuf import FrameBuffer
 
-i2c = I2C(scl=Pin(Pin.P19), sda=Pin(Pin.P20), freq=400000)
+#i2c = I2C(0, scl=Pin(Pin.P19), sda=Pin(Pin.P20), freq=400000)
 
 class Font(object):
     def __init__(self, font_address=0x300000):
