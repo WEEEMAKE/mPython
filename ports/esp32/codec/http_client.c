@@ -132,9 +132,9 @@ static int http_request(esp_http_client_handle_t client, int *content_length)
     if(http_param_instance->http_head != NULL){
         for(int i = 0; i < 6; i++)
             esp_http_client_set_header(client, http_param_instance->http_head[i].key, http_param_instance->http_head[i].value);
-        free((char *)http_head[3].value);
-        free((char *)http_head[0].value);
-        free((char *)http_head[1].value);
+        // free((char *)http_head[3].value);
+        // free((char *)http_head[0].value);
+        // free((char *)http_head[1].value);
     }
 
     if ((err = esp_http_client_open(client, http_param_instance->http_body_len)) != ESP_OK) {
@@ -410,10 +410,8 @@ int http_request_iat(void *data)
     if(http_param_instance->http_head != NULL){
         for(int i = 0; i < 6; i++)
             esp_http_client_set_header(client, http_param_instance->http_head[i].key, http_param_instance->http_head[i].value);
-        // esp_http_client_set_header(client, http_param_instance->http_head[5].key, http_param_instance->http_head[5].value);
-        //esp_http_client_set_header(client, "Transfer-Encoding", "chunked");
-        free((char *)http_head[3].value);
-        free((char *)http_head[0].value);
+        // free((char *)http_head[3].value);
+        // free((char *)http_head[0].value);
     }
 
     if ((err = esp_http_client_open(client, recorder->file_size)) != ESP_OK) { //http_param_instance->http_body_len
@@ -441,8 +439,7 @@ int http_request_iat(void *data)
     {
         // ESP_LOGE(TAG, "content_len: %d, content_type: %d.", content_length, http_param_instance->content_type);
         esp_http_client_read(client, (char *)http_param_instance->http_read_buffer, content_length); 
-        printf("%s", (char *)http_param_instance->http_read_buffer);
-        // ESP_LOGE(TAG, "???: %s.", http_param_instance->http_read_buffer);
+        // printf("%s", (char *)http_param_instance->http_read_buffer);
     } 
 
     esp_http_client_close(client);

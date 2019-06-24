@@ -32,6 +32,7 @@ typedef struct {
     uint16_t recorde_time;
     bool save_to_file;
     bool iat_config_flag;
+    bool iat_record_finish;
     content_type_t content_type;
 } recorder_t;
 

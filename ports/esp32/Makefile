@@ -18,7 +18,7 @@ PORT ?= /dev/ttyUSB0
 BAUD ?= 460800
 FLASH_MODE ?= dio
 FLASH_FREQ ?= 40m
-FLASH_SIZE ?= 4MB
+FLASH_SIZE ?= 8MB
 CROSS_COMPILE ?= xtensa-esp32-elf-
 OBJDUMP = $(CROSS_COMPILE)objdump
 

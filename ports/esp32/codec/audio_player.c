@@ -93,13 +93,21 @@ void audio_player_destroy()
     }
 
     http_param_handle_destroy();
+
+    renderer_destroy();
+    if(http_head[3].value != NULL){
+        free((char *)http_head[3].value);
+        http_head[3].value = NULL;
+    }
+    if(http_head[0].value != NULL){
+        free((char *)http_head[0].value);
+        http_head[0].value = NULL;
+    }       
     if(http_head[1].value != NULL)
     {
         free((char *)http_head[1].value);
         http_head[1].value = NULL;
-    }
-    renderer_destroy();
-
+    }         
     // ESP_LOGE(TAG, "RAM left %d", esp_get_free_heap_size());
 }
 

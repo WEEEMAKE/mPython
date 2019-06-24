@@ -48,7 +48,7 @@
 #include "driver/adc.h"
 #include "wav_head.h"
 
-//static const char *TAG = "audio";
+// static const char *TAG = "audio";
 
 HTTP_HEAD_VAL http_head[6] = {
     {"X-CurTime", NULL},
@@ -112,7 +112,7 @@ STATIC void iat_record(const char *file_name)
     int out;
     size_t n = 0;  
     int i = 0;
-    uint16_t record_times = 32 * 2000 / renderer->i2s_read_buff_size; //caculate record loops
+    uint16_t record_times = 32 * recorder->recorde_time / renderer->i2s_read_buff_size; //caculate record loops
     renderer_adc_enable(renderer->i2s_num); 
     while(i < record_times)
     {
@@ -221,7 +221,7 @@ STATIC mp_obj_t audio_player_init(void)
     }
     else
     {
-        mp_raise_msg(&mp_type_RuntimeError, "Player is initialized.");
+        mp_warning(NULL, "Player is initialized.");
     }
     
     return mp_const_none;
@@ -237,7 +237,7 @@ STATIC mp_obj_t audio_player_deinit(void)
         audio_player_destroy();  
     }
     else{
-        mp_raise_msg(&mp_type_RuntimeError, "Sorry, player is in playing status, can't release.");
+        mp_warning(NULL, "Player is in playing status, can't release.");
     }
     return mp_const_none; 
 }
@@ -287,7 +287,7 @@ STATIC mp_obj_t audio_resume(void)
     }
     else
     {
-        mp_raise_ValueError("No player.");
+        mp_warning(NULL, "No player.");
     }   
     return mp_const_none;  
 }
@@ -301,7 +301,7 @@ STATIC mp_obj_t audio_stop(void)
     }
     else
     {
-        mp_raise_ValueError("No player.");
+       mp_warning(NULL, "No player.");
     }
     return mp_const_none;   
 }
@@ -316,7 +316,7 @@ STATIC mp_obj_t audio_pause(void)
     }
     else
     {
-        mp_raise_ValueError("No player.");
+        mp_warning(NULL, "No player.");
     }
     return  mp_const_none;   
 }
@@ -384,7 +384,7 @@ STATIC mp_obj_t audio_webtts_config(size_t n_args, const mp_obj_t *pos_args, mp_
     }
     else
     {
-        mp_raise_ValueError("Not init player or config completef.");
+        mp_warning(NULL, "Please init player first.");
     }
     return mp_const_none;
 }
@@ -445,7 +445,7 @@ STATIC mp_obj_t audio_webtts(mp_obj_t body)
     }    
     else
     {
-        mp_raise_ValueError("Please init player and config tts first.");
+        mp_warning(NULL, "Please init player or config web tts first.");
     }
     
     return mp_const_none;
@@ -480,43 +480,43 @@ STATIC mp_obj_t audio_recorder_init(void)
     }
     else
     {
-        mp_raise_msg(&mp_type_RuntimeError, "Recorder is initialized.");
+        mp_warning(NULL, "Recorder is initialized.");
     }
     
     return mp_const_none; 
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_0(audio_recorder_init_obj, audio_recorder_init);
 
-STATIC mp_obj_t audio_loudness(void)
-{
-    renderer_config_t *renderer = renderer_get();
-    uint32_t len = 32; //320bytes: record 10ms
-    uint16_t *d_buff = calloc(len/2, sizeof(uint16_t));
-    uint8_t *read_buff = calloc(len, sizeof(uint8_t)); 
+// STATIC mp_obj_t audio_loudness(void)
+// {
+//     renderer_config_t *renderer = renderer_get();
+//     uint32_t len = 32; //320bytes: record 10ms
+//     uint16_t *d_buff = calloc(len/2, sizeof(uint16_t));
+//     uint8_t *read_buff = calloc(len, sizeof(uint8_t)); 
 
-    renderer_adc_enable(renderer->i2s_num);    
-    renderer_read_raw(read_buff, len);
-    renderer_adc_disable(renderer->i2s_num);
+//     renderer_adc_enable(renderer->i2s_num);    
+//     renderer_read_raw(read_buff, len);
+//     renderer_adc_disable(renderer->i2s_num);
 
-    i2s_adc_data_scale1(d_buff, read_buff, len);
-    audio_recorder_quicksort(d_buff, len/2, 0, len/2 - 1);
-    // for(int i = 0; i < len/2; i++)
-    //     printf("%d\n", d_buff[i]);
-    // int i;
-    // uint32_t sum1 = 0;
-    // uint32_t sum2 = 0;
-    // for(i = 0; i < 10; i++){
-    //     sum1 += d_buff[i+1];
-    //     sum2 += d_buff[len/2 - 2 - i];
-    // }
+//     i2s_adc_data_scale1(d_buff, read_buff, len);
+//     audio_recorder_quicksort(d_buff, len/2, 0, len/2 - 1);
+//     // for(int i = 0; i < len/2; i++)
+//     //     printf("%d\n", d_buff[i]);
+//     // int i;
+//     // uint32_t sum1 = 0;
+//     // uint32_t sum2 = 0;
+//     // for(i = 0; i < 10; i++){
+//     //     sum1 += d_buff[i+1];
+//     //     sum2 += d_buff[len/2 - 2 - i];
+//     // }
 
-    // uint32_t sum = (sum2 -sum1)/10;
-    uint32_t sum = d_buff[len/2-2] - d_buff[1];
-    free(read_buff);
-    free(d_buff);
-    return MP_OBJ_NEW_SMALL_INT(sum);
-}
-STATIC MP_DEFINE_CONST_FUN_OBJ_0(audio_loudness_obj, audio_loudness);
+//     // uint32_t sum = (sum2 -sum1)/10;
+//     uint32_t sum = d_buff[len/2-2] - d_buff[1];
+//     free(read_buff);
+//     free(d_buff);
+//     return MP_OBJ_NEW_SMALL_INT(sum);
+// }
+// STATIC MP_DEFINE_CONST_FUN_OBJ_0(audio_loudness_obj, audio_loudness);
 
 STATIC mp_obj_t audio_record(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args)
 {
@@ -570,19 +570,38 @@ STATIC mp_obj_t audio_iat_config(size_t n_args, const mp_obj_t *pos_args, mp_map
         free(src);
 
         recorder->iat_config_flag = true;
+        recorder->iat_record_finish = false;
     }
     else{
-        mp_raise_ValueError("Not init recorder or config completef.");
+        mp_warning(NULL, "Please init recorder first.");
     }
 
     return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(audio_iat_config_obj, 0, audio_iat_config);
 
+STATIC mp_obj_t audio_iat_record(mp_obj_t rec_time)
+{
+    recorder_t *recorder = get_recorder_handle();
+   
+    if(recorder != NULL){
+        recorder->file_name = "tmp.pcm";
+        recorder->recorde_time = mp_obj_get_int(rec_time) * 1000;
+        iat_record(recorder->file_name); 
+        recorder->iat_record_finish = true;
+        // ESP_LOGE(TAG, "iat record finish.");
+    }
+    else{
+        mp_warning(NULL, "Please init recorder first.");
+    }
+    return mp_const_none;   
+}
+STATIC MP_DEFINE_CONST_FUN_OBJ_1(audio_iat_record_obj, audio_iat_record);
+
 STATIC mp_obj_t audio_iat(void)
 {
     recorder_t *recorder = get_recorder_handle();
-    if(recorder != NULL && (recorder->iat_config_flag))
+    if(recorder != NULL && (recorder->iat_config_flag) && (recorder->iat_record_finish == true))
     {
         char *src = calloc(300, sizeof(char));
         char *checksum = calloc(40, sizeof(char)); //资源在http_client任务中处理完http head后释放。
@@ -610,9 +629,9 @@ STATIC mp_obj_t audio_iat(void)
         http_head[3].value = (const char *)checksum;
         // ESP_LOGE(TAG, "x-checksum : %s", http_head[3].value);
 
-        recorder->file_name = "tmp.pcm";
-        iat_record(recorder->file_name); 
-        // ESP_LOGE(TAG, "iat record finish.");
+        // recorder->file_name = "tmp.pcm";
+        // iat_record(recorder->file_name); 
+        // // ESP_LOGE(TAG, "iat record finish.");
 
         http_param_t *http_param = get_http_param_handle();
         http_param->http_head = http_head;                                                 
@@ -626,7 +645,7 @@ STATIC mp_obj_t audio_iat(void)
         return return_json;
     }
     else{
-        mp_raise_ValueError("Please init recorder and config iat first.");
+        mp_warning(NULL, "Please init recorder and config iat and record first.");
     }
     
     return mp_const_none;
@@ -654,10 +673,11 @@ STATIC const mp_map_elem_t mpython_audio_locals_dict_table[] = {
     {MP_OBJ_NEW_QSTR(MP_QSTR_xunfei_tts_config), (mp_obj_t)&audio_webtts_config_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_xunfei_tts), (mp_obj_t)&webtts_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_recorder_init), (mp_obj_t)&audio_recorder_init_obj},
-    {MP_OBJ_NEW_QSTR(MP_QSTR_loudness), (mp_obj_t)&audio_loudness_obj},
+    // {MP_OBJ_NEW_QSTR(MP_QSTR_loudness), (mp_obj_t)&audio_loudness_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_record), (mp_obj_t)&audio_record_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_recorder_deinit), (mp_obj_t)&audio_recorder_deinit_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_xunfei_iat_config), (mp_obj_t)&audio_iat_config_obj},
+    {MP_OBJ_NEW_QSTR(MP_QSTR_xunfei_iat_record), (mp_obj_t)&audio_iat_record_obj},
     {MP_OBJ_NEW_QSTR(MP_QSTR_xunfei_iat), (mp_obj_t)&audio_iat_obj},
 };
 

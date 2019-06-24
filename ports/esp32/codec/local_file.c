@@ -177,7 +177,7 @@ void local_file_read(void *pvParameters)
         player->media_stream.content_type = AUDIO_PCM;
     }else if((strstr(player->url, ".wav") != NULL)){
         player->media_stream.content_type = AUDIO_WAV;
-        ESP_LOGE(TAG, "wav file");
+        // ESP_LOGE(TAG, "wav file");
     }else if((strstr(player->url, ".m4a") != NULL)){
         player->media_stream.content_type = AUDIO_MP4;
     }else if((strstr(player->url, ".aac") != NULL)){
